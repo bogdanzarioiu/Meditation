@@ -32,26 +32,35 @@ struct ContentView: View {
                         .frame(width: 180, height: 180)
                         .foregroundColor(.blue)
                     .overlay(
-                        Circle().stroke().scale(1.01)
+                        Circle()
+                            .stroke(Color.blue, style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
+                            .scaleEffect(1.05)
                     )
                         .onTapGesture(perform: {
                             if self.timerManager.timerMode == .initial {
                                 self.timerManager.setTimerLength(minutes: self.minutesOption[self.selectedPickerValue]*60)
                             }
-                            self.timerManager.timerMode == .running ? self.timerManager.pauseTimer() : self.timerManager.startTimer()
+                            withAnimation {
+                                
+                                self.timerManager.timerMode == .running ? self.timerManager.pauseTimer() : self.timerManager.startTimer()
+                            }
                         })
                     
-                    
-                    if timerManager.timerMode == .paused {
-                        Image(systemName: "gobackward")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 50, height: 50)
-                            .padding(.top, 40)
-                            .onTapGesture {
-                                self.timerManager.resetTimer()
+                
+                        
+                        if timerManager.timerMode == .paused {
+                            Image(systemName: "gobackward")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 50, height: 50)
+                                .padding(.top, 40)
+                                .onTapGesture {
+                                    withAnimation {
+                                        self.timerManager.resetTimer()
+                                    }
+                            }
                         }
-                    }
+                    
                     
                     if timerManager.timerMode == .initial {
                         Picker(selection: $selectedPickerValue, label: Text("label is hidden anyway")) {
